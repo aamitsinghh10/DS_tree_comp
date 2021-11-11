@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void leaf(TreeNode *root,vector<int> &res)
+    {
+        if(root==NULL)
+            return;
+        if(root->left==NULL && root->right==NULL)
+            res.push_back(root->val);
+        
+        leaf(root->left,res);
+        leaf(root->right,res);
+    }
+    bool leafSimilar(TreeNode* root1, TreeNode* root2) 
+    {
+        vector<int> res1;
+        vector<int> res2;
+        
+        leaf(root1,res1);
+        leaf(root2,res2);
+        
+        return res1==res2;
+    }
+};
