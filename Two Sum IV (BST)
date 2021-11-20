@@ -1,0 +1,66 @@
+class BSTIterator{
+    public:
+        stack<TreeNode *> st;
+        bool reverse=true;//if reverse is true then it is for (Before Pointer) and if false (it is for next iterator)
+    BSTIterator(TreeNode *root,bool isreverse)
+    {
+        reverse=isreverse;
+        pushAll(root);
+    }
+
+    bool hasNext()
+    {
+        return !st.empty();
+    }
+    
+    int next()
+    {
+        TreeNode *tmpNode=st.top();
+        st.pop();
+        
+        if(!reverse)//when reverse is false and there is no left and pop top of stack and insert its right
+            pushAll(tmpNode->right);
+        else
+            pushAll(tmpNode->left);//when reverse is true and there is no right and pop top of stack and insert its left
+        
+        return tmpNode->val;
+    }
+    
+    void pushAll(TreeNode *root)
+    {
+        while(root!=NULL)
+        {
+            st.push(root);
+            if(!reverse)//when reverse is false move root to left and push it on stack
+                root=root->left;
+            else
+                root=root->right;//when true move root to right and insert it on stack
+        }
+            
+    }
+    
+};
+class Solution {
+public:
+    bool findTarget(TreeNode* root, int k) 
+    {
+        if(root==NULL)
+            return false;
+        BSTIterator l(root,false);
+        BSTIterator r(root,true);
+        
+        int i=l.next();
+        int j=r.next();
+        
+        while(i<j)
+        {
+            if(i+j==k)
+                return true;
+            else if(i+j<k)
+                i=l.next();
+            else
+                j=r.next();
+        }
+        return false;
+    }
+};
